@@ -23,7 +23,14 @@ window.addEventListener('load', () => {
 
   numberFormat = Intl.NumberFormat('pt-BR');
 
-  fetchCountries();
+  if (localStorage.getItem('all') == null && localStorage.getItem('fav') == null) {
+    fetchCountries();
+  } else {
+    allCountries = JSON.parse(localStorage.getItem('all'));
+    favCountries = JSON.parse(localStorage.getItem('fav'));
+    render();
+  }
+
 });
 
 async function fetchCountries() {
@@ -145,6 +152,10 @@ function addToFav(id) {
   });
   allCountries = allCountries.filter(country => country.id !== id);
 
+
+  localStorage.setItem('all', JSON.stringify(allCountries));
+  localStorage.setItem('fav', JSON.stringify(favCountries));
+
   render();
 }
 function removeFromFav(id) {
@@ -155,6 +166,9 @@ function removeFromFav(id) {
     return a.name.localeCompare(b.name);
   });
   favCountries = favCountries.filter(country => country.id !== id);
+
+  localStorage.setItem('all', JSON.stringify(allCountries));
+  localStorage.setItem('fav', JSON.stringify(favCountries));
 
   render();
 }
